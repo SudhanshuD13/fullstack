@@ -1,3 +1,4 @@
+
 pipeline {
     agent any
 
@@ -13,7 +14,7 @@ pipeline {
             steps {
                 echo 'Scanning for secrets using Docker...'
                 // Hum Docker ke zariye gitleaks chalayenge taaki installation ka jhanjhat na ho
-                sh 'docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source="/path" -v'
+                sh 'docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source="/path" --no-git -v'
             }
         }
         
