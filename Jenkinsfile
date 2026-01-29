@@ -9,11 +9,25 @@ pipeline {
                 checkout scm
             }
         }
-stage('Gitleaks Scan') {
+	stage('Gitleaks Scan') {
     steps {
-        echo 'Scanning for secrets with Root Permissions...'
-        // -u 0:0 se hum root ban kar scan karenge taaki koi file na Chhute
-        sh 'docker run --rm -u 0:0 -v ${WORKSPACE}:/path zricethezav/gitleaks:latest detect --source="/path" --no-git --verbose'
+        echo 'Downloading Gitleaks binary inside Jenkins container...'
+        sh """
+        # Gitleaks download (Linux x64)
+        curl -L https://github.com/gitleaks/gitleaks/releases/download/v8.18.2/gitleaks_8.18.2_linux_x64.tar.gz -o gitleaks.tar.gz
+        
+        # Extract
+        tar -xzf gitleaks.tar.gz
+        
+        # Permissions
+        chmod +x gitleaks
+        
+        # Scan (Ab ye local files ko scan karega, Docker volume ka koi lafda nahi)
+        ./gitleaks detect --source=. --no-git --verbose
+        
+        # Cleanup
+        rm gitleaks gitleaks.tar.gz
+        """
     }
 }
         stage('SonarQube Analysis') {
