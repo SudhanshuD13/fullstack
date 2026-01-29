@@ -6,6 +6,7 @@ pipeline {
         stage('Checkout') {
             steps {
                 // Code fetch ho raha hai
+		cleanWs()
                 checkout scm
             }
         }
