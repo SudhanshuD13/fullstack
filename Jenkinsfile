@@ -5,8 +5,13 @@ pipeline {
 
         stage('Prepare Workspace') {
             steps {
-                cleanWs()
-                checkout scm
+            checkout([
+  $class: 'GitSCM',
+  branches: [[name: '*/main']],
+  userRemoteConfigs: [[url: 'https://github.com/SudhanshuD13/fullstack.git']],
+  extensions: [[$class: 'CleanBeforeCheckout']]
+])
+
             }
         }
 
