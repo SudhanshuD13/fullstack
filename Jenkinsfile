@@ -13,7 +13,7 @@ pipeline {
             steps {
                 echo 'Scanning for secrets...'
                 // Humne $(pwd) ko /path pe mount kiya hai, ab uske andar ki files scan karenge
-                sh 'docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source="/path" --no-git --verbose'
+                sh 'docker run --rm -v $(pwd):/code -w /code zricethezav/gitleaks:latest detect --no-git --verbose'
             }
         }
         stage('SonarQube Analysis') {
