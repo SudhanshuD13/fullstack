@@ -9,13 +9,13 @@ pipeline {
                 checkout scm
             }
         }
-	stage('Gitleaks Scan') {
-            steps {
-                echo 'Scanning for secrets...'
-                // Humne $(pwd) ko /path pe mount kiya hai, ab uske andar ki files scan karenge
-                sh 'docker run --rm -v $(pwd):/code -w /code zricethezav/gitleaks:latest detect --no-git --verbose'
-            }
-        }
+stage('Gitleaks Scan') {
+    steps {
+        echo 'Scanning for secrets with Root Permissions...'
+        // -u 0:0 se hum root ban kar scan karenge taaki koi file na Chhute
+        sh 'docker run --rm -u 0:0 -v ${WORKSPACE}:/path zricethezav/gitleaks:latest detect --source="/path" --no-git --verbose'
+    }
+}
         stage('SonarQube Analysis') {
             steps {
                 echo 'SonarQube stage coming soon...'
