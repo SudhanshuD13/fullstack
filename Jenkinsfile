@@ -9,15 +9,13 @@ pipeline {
                 checkout scm
             }
         }
-
-        stage('Gitleaks Scan') {
+	stage('Gitleaks Scan') {
             steps {
-                echo 'Scanning for secrets using Docker...'
-                // Hum Docker ke zariye gitleaks chalayenge taaki installation ka jhanjhat na ho
-                sh 'docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source="/path" --no-git -v'
+                echo 'Scanning for secrets...'
+                // Humne $(pwd) ko /path pe mount kiya hai, ab uske andar ki files scan karenge
+                sh 'docker run --rm -v $(pwd):/path zricethezav/gitleaks:latest detect --source="/path" --no-git --verbose'
             }
         }
-        
         stage('SonarQube Analysis') {
             steps {
                 echo 'SonarQube stage coming soon...'
