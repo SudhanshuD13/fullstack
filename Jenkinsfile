@@ -12,6 +12,7 @@ pipeline {
         }
 	stage('Gitleaks Scan') {
     steps {
+	cleanWs()
         echo 'Downloading Gitleaks binary inside Jenkins container...'
         sh """
         # Gitleaks download (Linux x64)
